@@ -4,10 +4,10 @@ import { useState, useMemo } from "react";
 // 사진을 넣으려면 상품에 img 항목을 추가하세요. 예: img: "/coat.jpg" (public 폴더의 사진)
 // 또는 img: "https://..." (인터넷 이미지 주소). img가 없으면 색상 그라데이션이 표시됩니다.
 const INITIAL_PRODUCTS = [
-  { id: 1,  name: "울 발마칸 코트",     en: "Wool Balmacaan Coat",  price: 289000, cat: "아우터",  temp: [-10, 8],  c1: "#3b3a44", c2: "#5a5866", desc: "묵직한 이탈리아산 울 원단. 무릎까지 떨어지는 클래식 실루엣.", soldOut: false, img: "/IMG_7171" },
+  { id: 1,  name: "울 발마칸 코트",     en: "Wool Balmacaan Coat",  price: 289000, cat: "아우터",  temp: [-10, 8],  c1: "#3b3a44", c2: "#5a5866", desc: "묵직한 이탈리아산 울 원단. 무릎까지 떨어지는 클래식 실루엣.", soldOut: false },
   { id: 2,  name: "구스다운 푸퍼",       en: "Goose Down Puffer",    price: 245000, cat: "아우터",  temp: [-15, 4],  c1: "#1e2b23", c2: "#37503f", desc: "충전량 90/10 구스다운. 영하의 서울 출퇴근을 위한 방한 아우터.", soldOut: false },
   { id: 3,  name: "코듀로이 트러커 자켓", en: "Corduroy Trucker",     price: 128000, cat: "아우터",  temp: [6, 16],   c1: "#7a5c3e", c2: "#9c7a54", desc: "8웰 코듀로이, 워싱 가공으로 처음부터 길이 든 촉감.", soldOut: false },
-  { id: 4,  name: "리넨 오픈칼라 셔츠",   en: "Linen Open Collar",    price: 79000,  cat: "상의",    temp: [22, 38],  c1: "#d8d2c2", c2: "#c2b89e", desc: "프렌치 리넨 100%. 한여름에도 바람이 지나가는 오버핏.", soldOut: false },
+  { id: 4,  name: "리넨 오픈칼라 셔츠",   en: "Linen Open Collar",    price: 79000,  cat: "상의",    temp: [22, 38],  c1: "#d8d2c2", c2: "#c2b89e", desc: "프렌치 리넨 100%. 한여름에도 바람이 지나가는 오버핏.", soldOut: false, img: "/IMG_7171.jpg" },
   { id: 5,  name: "헤비 코튼 후디",       en: "Heavy Cotton Hoodie",  price: 89000,  cat: "상의",    temp: [4, 15],   c1: "#8a8d93", c2: "#a7aab0", desc: "450gsm 기모 없는 헤비 코튼. 세 계절을 책임지는 무게감.", soldOut: false },
   { id: 6,  name: "메리노 터틀넥",        en: "Merino Turtleneck",    price: 98000,  cat: "상의",    temp: [-8, 10],  c1: "#5b3030", c2: "#7c4646", desc: "엑스트라파인 메리노 울. 얇지만 따뜻하게.", soldOut: false },
   { id: 7,  name: "수피마 코튼 티셔츠",   en: "Supima Tee",           price: 32000,  cat: "상의",    temp: [18, 36],  c1: "#e9e6dd", c2: "#d6d2c6", desc: "수피마 코튼의 광택과 탄탄함. 세 장씩 사게 되는 기본 티.", soldOut: false },
