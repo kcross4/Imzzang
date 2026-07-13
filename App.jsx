@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 // 사진을 넣으려면 상품에 img 항목을 추가하세요. 예: img: "/coat.jpg" (public 폴더의 사진)
 // 또는 img: "https://..." (인터넷 이미지 주소). img가 없으면 색상 그라데이션이 표시됩니다.
 const INITIAL_PRODUCTS = [
-  { id: 1,  name: "울 발마칸 코트",     en: "Wool Balmacaan Coat",  price: 289000, cat: "아우터",  temp: [-10, 8],  c1: "#3b3a44", c2: "#5a5866", desc: "묵직한 이탈리아산 울 원단. 무릎까지 떨어지는 클래식 실루엣.", soldOut: false, img: "IMG_7171" },
+  { id: 1,  name: "울 발마칸 코트",     en: "Wool Balmacaan Coat",  price: 289000, cat: "아우터",  temp: [-10, 8],  c1: "#3b3a44", c2: "#5a5866", desc: "묵직한 이탈리아산 울 원단. 무릎까지 떨어지는 클래식 실루엣.", soldOut: false, img: "/IMG_7171" },
   { id: 2,  name: "구스다운 푸퍼",       en: "Goose Down Puffer",    price: 245000, cat: "아우터",  temp: [-15, 4],  c1: "#1e2b23", c2: "#37503f", desc: "충전량 90/10 구스다운. 영하의 서울 출퇴근을 위한 방한 아우터.", soldOut: false },
   { id: 3,  name: "코듀로이 트러커 자켓", en: "Corduroy Trucker",     price: 128000, cat: "아우터",  temp: [6, 16],   c1: "#7a5c3e", c2: "#9c7a54", desc: "8웰 코듀로이, 워싱 가공으로 처음부터 길이 든 촉감.", soldOut: false },
   { id: 4,  name: "리넨 오픈칼라 셔츠",   en: "Linen Open Collar",    price: 79000,  cat: "상의",    temp: [22, 38],  c1: "#d8d2c2", c2: "#c2b89e", desc: "프렌치 리넨 100%. 한여름에도 바람이 지나가는 오버핏.", soldOut: false },
