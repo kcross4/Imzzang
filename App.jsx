@@ -1,6 +1,8 @@
 import { useState, useMemo } from "react";
 
 // ─── 초기 상품 데이터 ───────────────────────────────────────────
+// 사진을 넣으려면 상품에 img 항목을 추가하세요. 예: img: "/coat.jpg" (public 폴더의 사진)
+// 또는 img: "https://..." (인터넷 이미지 주소). img가 없으면 색상 그라데이션이 표시됩니다.
 const INITIAL_PRODUCTS = [
   { id: 1,  name: "울 발마칸 코트",     en: "Wool Balmacaan Coat",  price: 289000, cat: "아우터",  temp: [-10, 8],  c1: "#3b3a44", c2: "#5a5866", desc: "묵직한 이탈리아산 울 원단. 무릎까지 떨어지는 클래식 실루엣.", soldOut: false },
   { id: 2,  name: "구스다운 푸퍼",       en: "Goose Down Puffer",    price: 245000, cat: "아우터",  temp: [-15, 4],  c1: "#1e2b23", c2: "#37503f", desc: "충전량 90/10 구스다운. 영하의 서울 출퇴근을 위한 방한 아우터.", soldOut: false },
@@ -40,7 +42,7 @@ const tempLabel = (t) =>
   t <= -5 ? "한파주의보" : t <= 5 ? "코트의 계절" : t <= 14 ? "레이어드하기 좋은" :
   t <= 23 ? "가장 옷 입기 좋은" : t <= 30 ? "여름의 문턱" : "한여름";
 
-const EMPTY_FORM = { name: "", en: "", price: "", cat: "상의", tempMin: 10, tempMax: 25, c1: "#5a5866", c2: "#8a8d93", desc: "", soldOut: false };
+const EMPTY_FORM = { name: "", en: "", price: "", cat: "상의", tempMin: 10, tempMax: 25, c1: "#5a5866", c2: "#8a8d93", desc: "", soldOut: false, img: "" };
 
 export default function ImzzangStore() {
   // 쇼핑 상태
@@ -124,7 +126,7 @@ export default function ImzzangStore() {
       price: Number(form.price), cat: form.cat,
       temp: [Number(form.tempMin), Number(form.tempMax)],
       c1: form.c1, c2: form.c2, desc: form.desc.trim() || "설명이 아직 없습니다.",
-      soldOut: form.soldOut,
+      soldOut: form.soldOut, img: form.img.trim(),
     };
     if (editingId) {
       setProducts((prev) => prev.map((p) => (p.id === editingId ? { ...p, ...data } : p)));
@@ -136,7 +138,7 @@ export default function ImzzangStore() {
 
   const startEdit = (p) => {
     setEditingId(p.id);
-    setForm({ name: p.name, en: p.en, price: p.price, cat: p.cat, tempMin: p.temp[0], tempMax: p.temp[1], c1: p.c1, c2: p.c2, desc: p.desc, soldOut: p.soldOut });
+    setForm({ name: p.name, en: p.en, price: p.price, cat: p.cat, tempMin: p.temp[0], tempMax: p.temp[1], c1: p.c1, c2: p.c2, desc: p.desc, soldOut: p.soldOut, img: p.img || "" });
   };
 
   const deleteProduct = (id) => {
@@ -228,6 +230,7 @@ export default function ImzzangStore() {
                     <div><label style={labelStyle}>대표 색상 1</label><input style={{ ...inputStyle, height: 42, padding: 4 }} type="color" value={form.c1} onChange={(e) => setForm({ ...form, c1: e.target.value })} /></div>
                     <div><label style={labelStyle}>대표 색상 2</label><input style={{ ...inputStyle, height: 42, padding: 4 }} type="color" value={form.c2} onChange={(e) => setForm({ ...form, c2: e.target.value })} /></div>
                   </div>
+                  <div><label style={labelStyle}>사진 주소 (선택)</label><input style={inputStyle} value={form.img} onChange={(e) => setForm({ ...form, img: e.target.value })} placeholder="/coat.jpg 또는 https://..." /></div>
                   <div><label style={labelStyle}>상품 설명</label><textarea style={{ ...inputStyle, minHeight: 70, resize: "vertical" }} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} /></div>
                   <label style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 13, cursor: "pointer" }}>
                     <input type="checkbox" checked={form.soldOut} onChange={(e) => setForm({ ...form, soldOut: e.target.checked })} style={{ accentColor: "#171715" }} /> 품절 처리
@@ -249,7 +252,9 @@ export default function ImzzangStore() {
                 <div style={{ display: "grid", gap: 10 }}>
                   {products.map((p) => (
                     <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 14, background: "#fff", border: "1px solid #e3e0d7", borderRadius: 8, padding: "12px 14px", opacity: p.soldOut ? 0.55 : 1 }}>
-                      <div style={{ width: 44, height: 56, borderRadius: 4, background: `linear-gradient(160deg, ${p.c1}, ${p.c2})`, flexShrink: 0 }} />
+                      <div style={{ width: 44, height: 56, borderRadius: 4, background: `linear-gradient(160deg, ${p.c1}, ${p.c2})`, flexShrink: 0, position: "relative", overflow: "hidden" }}>
+                        {p.img && <img src={p.img} alt={p.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { e.currentTarget.style.display = "none"; }} />}
+                      </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <p style={{ fontSize: 14, fontWeight: 700 }}>{p.name} {p.soldOut && <span style={{ fontSize: 11, color: "#b0342b", fontWeight: 700 }}>품절</span>}</p>
                         <p style={{ fontSize: 12, color: "#8a877d" }}>{p.cat} · {won(p.price)} · {p.temp[0]}°~{p.temp[1]}°</p>
@@ -350,6 +355,7 @@ export default function ImzzangStore() {
                   <button key={p.id} className="card fadeup" onClick={() => { setSelected(p); setSize("M"); }}
                     style={{ animationDelay: `${i * 40}ms`, background: "none", border: "none", padding: 0, textAlign: "left", borderRadius: 4 }}>
                     <div style={{ aspectRatio: "3/4", borderRadius: 4, background: `linear-gradient(160deg, ${p.c1}, ${p.c2})`, position: "relative", overflow: "hidden", filter: p.soldOut ? "grayscale(.7)" : "none" }}>
+                      {p.img && <img src={p.img} alt={p.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { e.currentTarget.style.display = "none"; }} />}
                       <span style={{ position: "absolute", top: 12, left: 12, fontSize: 10, letterSpacing: "2px", color: "rgba(255,255,255,.85)", fontWeight: 600 }}>{p.en.toUpperCase()}</span>
                       {p.soldOut && (
                         <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(23,23,21,.35)", color: "#fff", fontSize: 15, fontWeight: 800, letterSpacing: "2px" }}>SOLD OUT</span>
@@ -375,7 +381,9 @@ export default function ImzzangStore() {
       {selected && (
         <div onClick={() => setSelected(null)} style={{ position: "fixed", inset: 0, background: "rgba(23,23,21,.45)", zIndex: 40, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
           <div className="fadeup" onClick={(e) => e.stopPropagation()} style={{ background: "#F4F3EF", borderRadius: 8, maxWidth: 720, width: "100%", maxHeight: "90vh", overflow: "auto", display: "grid", gridTemplateColumns: "minmax(200px, 1fr) 1.2fr" }}>
-            <div style={{ background: `linear-gradient(160deg, ${selected.c1}, ${selected.c2})`, minHeight: 320, filter: selected.soldOut ? "grayscale(.7)" : "none" }} />
+            <div style={{ background: `linear-gradient(160deg, ${selected.c1}, ${selected.c2})`, minHeight: 320, filter: selected.soldOut ? "grayscale(.7)" : "none", position: "relative", overflow: "hidden" }}>
+              {selected.img && <img src={selected.img} alt={selected.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { e.currentTarget.style.display = "none"; }} />}
+            </div>
             <div style={{ padding: "28px 26px" }}>
               <p style={{ fontSize: 11, letterSpacing: "2px", color: "#9a978c" }}>{selected.cat} · {selected.en.toUpperCase()}</p>
               <h2 style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-.5px", margin: "8px 0 6px" }}>{selected.name}</h2>
@@ -430,7 +438,9 @@ export default function ImzzangStore() {
                 <div style={{ flex: 1 }}>
                   {cart.map((item, idx) => (
                     <div key={idx} style={{ display: "flex", gap: 12, padding: "14px 0", borderBottom: "1px solid #e3e0d7" }}>
-                      <div style={{ width: 56, height: 72, borderRadius: 4, background: `linear-gradient(160deg, ${item.product.c1}, ${item.product.c2})`, flexShrink: 0 }} />
+                      <div style={{ width: 56, height: 72, borderRadius: 4, background: `linear-gradient(160deg, ${item.product.c1}, ${item.product.c2})`, flexShrink: 0, position: "relative", overflow: "hidden" }}>
+                        {item.product.img && <img src={item.product.img} alt={item.product.name} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} onError={(e) => { e.currentTarget.style.display = "none"; }} />}
+                      </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: 14, fontWeight: 700 }}>{item.product.name}</p>
                         <p style={{ fontSize: 12, color: "#8a877d", margin: "2px 0 8px" }}>사이즈 {item.size} · {won(item.product.price)}</p>
